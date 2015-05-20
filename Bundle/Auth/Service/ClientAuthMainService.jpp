@@ -23,8 +23,8 @@ class ClientAuthMainService extends MasterService {
 
 	_connect : function () {
 		this._sock.send('auth', {
-			token: 'abcdef'
-			// token: 'qwerty'
+			// token: 'abcdef'
+			token: 'qwerty'
 		});
 	}
 
