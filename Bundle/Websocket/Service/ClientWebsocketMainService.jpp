@@ -4,6 +4,7 @@ class ClientWebsocketMainService extends MasterService {
 
 	_io : undefined;
 	_sock : undefined;
+	_connected : false;
 	_host : '';
 	_port : '';
 
@@ -38,9 +39,7 @@ class ClientWebsocketMainService extends MasterService {
 	_initSocket : function () {
 		var socket_host = 'http://'+ this.getHost() +':'+ this.getPort();
 
-		this._sock = io.connect(socket_host, {
-			timeout: 1000
-		});
+		this._sock = io.connect(socket_host);
 
 		this._sock.on('connect', this._connect.bind(this));
 		this._sock.on('connect_error', this._connect_error.bind(this));
@@ -64,6 +63,7 @@ class ClientWebsocketMainService extends MasterService {
 	_connect : function (data) {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
+		this._connected = true;
 		dispatcher.trigger('Client:Websocket:connect', data);
 		console.log('_connect');
 	}
@@ -92,6 +92,7 @@ class ClientWebsocketMainService extends MasterService {
 	_disconnect : function () {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
+		this._connected = false;
 		dispatcher.trigger('Client:Websocket:disconnect');
 		console.log('_disconnect');
 	}
