@@ -1,0 +1,134 @@
+#import (Config.path +'/Kernel/Service/MasterService') = MasterService;
+
+class ClientWebsocketMainService extends MasterService {
+
+	_io : undefined;
+	_sock : undefined;
+	_host : '';
+	_port : '';
+
+	#default get, set for _io;
+	#default get, set for _host;
+	#default get, set for _port;
+	#default get, set for _sock;
+
+	initialize : function () {
+		var config = Config.modules.Client;
+
+		_super();
+		this.setPort(config.env.server.port);
+		this.setHost(config.env.server.host);
+
+		// Warning : Connexion it's instantly
+		this._initSocket()
+	}
+
+	on : function (listen, obj, callback) {
+		this._sock.on(listen, this._onEvent.bind(this, name, callback.bind(obj)));
+	}
+
+	send : function (name, data) {
+		if (data == undefined)
+			data = {};
+		dispatcher.trigger('Client:Websocket:emit.'+ name +'.pre', data);
+		this._sock.emit(name, data);
+		dispatcher.trigger('Client:Websocket:emit.'+ name +'.post', data);
+	}
+
+	_initSocket : function () {
+		var socket_host = 'http://'+ this.getHost() +':'+ this.getPort();
+
+		this._sock = io.connect(socket_host, {
+			timeout: 1000
+		});
+
+		this._sock.on('connect', this._connect.bind(this));
+		this._sock.on('connect_error', this._connect_error.bind(this));
+		this._sock.on('connect_timeout', this._connect_timeout.bind(this));
+		this._sock.on('error', this._error.bind(this));
+		this._sock.on('disconnect', this._disconnect.bind(this));
+		this._sock.on('reconnect', this._reconnect.bind(this));
+		this._sock.on('reconnect_attempt', this._reconnect_attempt.bind(this));
+		this._sock.on('reconnecting', this._reconnecting.bind(this));
+		this._sock.on('reconnect_error', this._reconnect_error.bind(this));
+		this._sock.on('reconnect_failed', this._reconnect_failed.bind(this));
+	}
+
+	_onEvent: function (name, callback, data) {
+		var dispatcher = serviceLocator.get('Dispatcher');
+		dispatcher.trigger('Client:Websocket:on.'+ name +'.pre', data);
+		callback(data);
+		dispatcher.trigger('Client:Websocket:on.'+ name + '.post', data);
+	}
+
+	_connect : function (data) {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:connect', data);
+		console.log('_connect');
+	}
+
+	_connect_error : function (data) {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:connect_error', data);
+		console.log('_connect_error');
+	}
+
+	_connect_timeout : function (data) {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:connect_timeout', data);
+		console.log('_connect_timeout');
+	}
+
+	_error : function (err) {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:error', err);
+		console.log('_error');
+	}
+
+	_disconnect : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:disconnect');
+		console.log('_disconnect');
+	}
+
+	_reconnect : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:reconnect');
+		console.log('_reconnect');
+	}
+
+	_reconnect_attempt : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:reconnect_attempt');
+		console.log('_reconnect_attempt');
+	}
+
+	_reconnecting : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:reconnecting');
+		console.log('_reconnecting');
+	}
+
+	_reconnect_error : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:reconnect_error');
+		console.log('_reconnect_error');
+	}
+
+	_reconnect_failed : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.trigger('Client:Websocket:reconnect_failed');
+		console.log('_reconnect_failed');
+	}
+
+}

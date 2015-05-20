@@ -1,0 +1,3 @@
+invokables:
+	client_websocket_main_service: Websoket/Service/ClientWebsocketMainService
+	client_auth_main_service: Auth/Service/ClientAuthMainService

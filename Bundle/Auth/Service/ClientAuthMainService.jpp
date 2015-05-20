@@ -1,0 +1,38 @@
+#import (Config.path +'/Kernel/Service/MasterService') = MasterService;
+
+class ClientAuthMainService extends MasterService {
+
+	_sock = undefined;
+
+	#default get, set for _sock;
+
+	initialize : function () {
+		_super();
+		var serviceManager = serviceLocator.get('ServiceManager');
+		this.setSock(serviceManager.get('client_websocket_main_service'));
+
+		this.onListen();
+	}
+
+	onListen : function () {
+		var dispatcher = serviceLocator.get('Dispatcher');
+
+		dispatcher.listen('Client:Websocket:connect', this, this._connect);
+		this._sock.on('auth', this, this.auth)
+	}
+
+	_connect : function () {
+		this._sock.send('auth', {
+			// token: 'abcdef'
+			token: 'qwerty'
+		});
+	}
+
+
+	auth : function (data) {
+		console.log('DATA -> ', data);
+	}
+
+}
+
+#export ClientAuthMainService;
