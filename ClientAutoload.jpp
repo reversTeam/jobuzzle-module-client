@@ -5,10 +5,10 @@ class ClientAutoload extends MasterAutoload {
 	confModuleName = 'Client';
 
 	onBootstrap : function () {
-		var serviceManager = serviceLocator.get('ServiceManager');
+		// var serviceManager = serviceLocator.get('ServiceManager');
 
-		var websocketService = serviceManager.get('client_websocket_main_service');
-		var authService = serviceManager.get('client_auth_main_service');
+		// var websocketService = serviceManager.get('client_websocket_main_service');
+		// var authService = serviceManager.get('client_auth_main_service');
 	}
 
 }
