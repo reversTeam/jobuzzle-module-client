@@ -3,13 +3,17 @@
 class ClientAuthMainService extends MasterService {
 
 	_sock = undefined;
+	_store = undefined;
 
 	#default get, set for _sock;
+	#default get, set for _store;
 
 	initialize : function () {
-		_super();
 		var serviceManager = serviceLocator.get('ServiceManager');
+
+		_super();
 		this.setSock(serviceManager.get('client_websocket_main_service'));
+		this.setStore(serviceLocator.get('ServiceManager').get('store_manager_main_service'));
 
 		this.onListen();
 	}
@@ -17,17 +21,19 @@ class ClientAuthMainService extends MasterService {
 	onListen : function () {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
-		dispatcher.listen('Client:Websocket:connect', this, this._connect);
+		dispatcher.listen('Client:Websocket:connect', this, this._connect.bind(this));
 		this._sock.on('auth', this, this.auth)
 	}
 
 	_connect : function () {
 		this._sock.send('auth', {
-			// token: 'abcdef'
-			token: 'qwerty'
+			token: 'abcdef'
+			// token: 'qwerty'
 		});
-	}
 
+		this.getStore().add('/etudiants');
+
+	}
 
 	auth : function (data) {
 		console.log('DATA -> ', data);
