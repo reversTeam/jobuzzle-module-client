@@ -29,6 +29,7 @@ class ClientWebsocketMainService extends MasterService {
 	}
 
 	send : function (name, data) {
+		var dispatcher = serviceLocator.get('Dispatcher');
 		if (data == undefined)
 			data = {};
 		dispatcher.trigger('Client:Websocket:emit.'+ name +'.pre', data);
