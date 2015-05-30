@@ -26,12 +26,13 @@ class ClientAuthMainService extends MasterService {
 	}
 
 	_connect : function () {
+		var router = serviceLocator.get('Router');
 		this._sock.send('auth', {
-			token: 'abcdef'
-			// token: 'qwerty'
+			// token: 'abcdef'
+			token: 'qwerty'
 		});
 
-		this.getStore().add('/etudiants');
+		this.getStore().add(router.build('/student'));
 
 	}
 
