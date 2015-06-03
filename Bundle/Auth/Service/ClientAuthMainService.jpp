@@ -2,16 +2,18 @@
 
 class ClientAuthMainService extends MasterService {
 
-	_sock = undefined;
 	_store = undefined;
+	_token = undefined;
+	_cookie = undefined;
 
 	#default get, set for _sock;
-	#default get, set for _store;
 
 	initialize : function () {
 		var serviceManager = serviceLocator.get('ServiceManager');
 
 		_super();
+		this._cookie = serviceManager.get('navigation_cookie_main_service');
+		this._token = this._cookie.get('token');
 		this.setSock(serviceManager.get('client_websocket_main_service'));
 		this.setStore(serviceLocator.get('ServiceManager').get('store_manager_main_service'));
 
@@ -27,17 +29,23 @@ class ClientAuthMainService extends MasterService {
 
 	_connect : function () {
 		var router = serviceLocator.get('Router');
+		var serviceManager = serviceLocator.get('ServiceManager');
+
+		if (!this._token)
+			this._token = prompt('Take me a token : ');
+
 		this._sock.send('auth', {
-			// token: 'abcdef'
-			token: 'qwerty'
+			token : this._token
 		});
-
-		this.getStore().add(router.build('/student'));
-
 	}
 
 	auth : function (data) {
-		console.log('DATA -> ', data);
+		var serviceManager = serviceLocator.get('ServiceManager');
+		var store = serviceManager.get('store_manager_main_service');
+		if (data != 'Invalid token') {
+			store.isMe(data);
+			this._cookie.create('token', this._token, 7);
+		}
 	}
 
 }
