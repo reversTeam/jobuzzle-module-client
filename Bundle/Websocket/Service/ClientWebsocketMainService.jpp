@@ -38,7 +38,7 @@ class ClientWebsocketMainService extends MasterService {
 	}
 
 	_initSocket : function () {
-		var socket_host = '//'+ this.getHost() +':'+ this.getPort();
+		var socket_host = 'http://'+ this.getHost() +':'+ this.getPort();
 
 		this._sock = io.connect(socket_host, {
 			reconnectionDelay: 1000,
