@@ -7,11 +7,13 @@ class ClientWebsocketMainService extends MasterService {
 	_connected : false;
 	_host : '';
 	_port : '';
+	_protocole : '';
 
 	#default get, set for _io;
 	#default get, set for _host;
 	#default get, set for _port;
 	#default get, set for _sock;
+	#default get, set for _protocole;
 
 	initialize : function () {
 		var config = Config.modules.Client;
@@ -19,6 +21,7 @@ class ClientWebsocketMainService extends MasterService {
 		_super();
 		this.setPort(config.env.server.port);
 		this.setHost(config.env.server.host);
+		this.setProtocole(config.env.server.protocole);
 
 		// Warning : Connexion it's instantly
 		this._initSocket();
@@ -38,12 +41,14 @@ class ClientWebsocketMainService extends MasterService {
 	}
 
 	_initSocket : function () {
-		var socket_host = 'http://'+ this.getHost() +':'+ this.getPort();
+		var config = Config.modules.Client;
+		var socket_host = this.getProtocole() +'://'+ this.getHost() +':'+ this.getPort();
 
 		this._sock = io.connect(socket_host, {
-			reconnectionDelay: 1000,
-			reconnectionDelayMax: 2000,
-			timeout: 7000
+			reconnectionDelay		: config.env.socket.reconnection_delay,		// 1000
+			reconnectionDelayMax	: config.env.socket.reconnection_delay_max,	// 2000
+			timeout					: config.env.socket.timeout,				// 7000
+			secure					: config.env.socket.secure
 		});
 
 		this._sock.on('connect', this._connect.bind(this));
