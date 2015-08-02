@@ -1,2 +1,3 @@
 host: api.jobuzzle.com
 port: 80
+protocole: https
