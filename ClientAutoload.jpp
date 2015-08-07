@@ -1,5 +1,3 @@
-#import (Config.path +'/Kernel/Autoload/MasterAutoload') = MasterAutoload;
-
 class ClientAutoload extends MasterAutoload {
 
 	confModuleName = 'Client';
@@ -12,5 +10,3 @@ class ClientAutoload extends MasterAutoload {
 	}
 
 }
-
-#export ClientAutoload;
