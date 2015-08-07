@@ -1,5 +1,3 @@
-#import (Config.path +'/Kernel/Service/MasterService') = MasterService;
-
 class ClientAuthMainService extends MasterService {
 
 	_store = undefined;
@@ -49,5 +47,3 @@ class ClientAuthMainService extends MasterService {
 	}
 
 }
-
-#export ClientAuthMainService;
