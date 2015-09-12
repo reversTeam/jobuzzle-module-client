@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-08-08 14:30:07
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-11 23:36:29
 **************************************************************/
 
 class ClientAuthMainService extends MasterService {
@@ -30,7 +30,7 @@ class ClientAuthMainService extends MasterService {
 		this.onListen();
 	}
 
-	onListen : function () {
+	public onListen : function () {
 		var dispatcher = serviceLocator.get('Dispatcher');
 
 		dispatcher.listen('Client:Websocket:connect', this, this._connect.bind(this));
@@ -45,7 +45,7 @@ class ClientAuthMainService extends MasterService {
 			this._token = prompt('Take me a token : ');
 
 		this._sock.send('auth', {
-			token : this._token
+			'token' : this._token
 		});
 	}
 
