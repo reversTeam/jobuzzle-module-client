@@ -7,14 +7,14 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-08-08 14:30:07
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-11 21:48:57
 **************************************************************/
 
 class ClientAutoload extends MasterAutoload {
 
 	confModuleName = 'Client';
 
-	init : function () {
+	public init : function () {
 		var serviceManager = serviceLocator.get('ServiceManager');
 
 		var websocketService = serviceManager.get('client_websocket_main_service');

@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-08-08 14:30:07
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-09-11 23:49:41
 **************************************************************/
 
 class ClientWebsocketMainService extends MasterService {
@@ -26,51 +26,51 @@ class ClientWebsocketMainService extends MasterService {
 	#default get, set for _protocole;
 
 	initialize : function () {
-		var config = Config.modules.Client;
+		var config = Config['modules']['Client'];
 
 		_super();
-		this.setPort(config.env.server.port);
-		this.setHost(config.env.server.host);
-		this.setProtocole(config.env.server.protocole);
+		this.setPort(config['env']['server']['port']);
+		this.setHost(config['env']['server']['host']);
+		this.setProtocole(config['env']['server']['protocole']);
 
 		// Warning : Connexion it's instantly
 		this._initSocket();
 	}
 
-	on : function (listen, obj, callback) {
-		this._sock.on(listen, this._onEvent.bind(this, name, callback.bind(obj)));
+	public on : function (listen, obj, callback) {
+		this._sock['on'](listen, this._onEvent.bind(this, listen, callback.bind(obj)));
 	}
 
-	send : function (name, data) {
+	public send : function (name, data) {
 		var dispatcher = serviceLocator.get('Dispatcher');
 		if (data == undefined)
 			data = {};
 		dispatcher.trigger('Client:Websocket:emit.'+ name +'.pre', data);
-		this._sock.emit(name, data);
+		this._sock['emit'](name, data);
 		dispatcher.trigger('Client:Websocket:emit.'+ name +'.post', data);
 	}
 
 	_initSocket : function () {
-		var config = Config.modules.Client;
+		var config = Config['modules']['Client'];
 		var socket_host = this.getProtocole() +'://'+ this.getHost() +':'+ this.getPort();
 
-		this._sock = io.connect(socket_host, {
-			reconnectionDelay		: config.env.socket.reconnection_delay,		// 1000
-			reconnectionDelayMax	: config.env.socket.reconnection_delay_max,	// 2000
-			timeout					: config.env.socket.timeout,				// 7000
-			secure					: config.env.socket.secure
+		this._sock = window['io']['connect'](socket_host, {
+			"reconnectionDelay"		: config['env']['socket']['reconnection_delay'],		// 1000
+			"reconnectionDelayMax"	: config['env']['socket']['reconnection_delay_max'],	// 2000
+			"timeout"				: config['env']['socket']['timeout'],					// 7000
+			"secure"				: config['env']['socket']['secure']
 		});
 
-		this._sock.on('connect', this._connect.bind(this));
-		this._sock.on('connect_error', this._connect_error.bind(this));
-		this._sock.on('connect_timeout', this._connect_timeout.bind(this));
-		this._sock.on('error', this._error.bind(this));
-		this._sock.on('disconnect', this._disconnect.bind(this));
-		this._sock.on('reconnect', this._reconnect.bind(this));
-		this._sock.on('reconnect_attempt', this._reconnect_attempt.bind(this));
-		this._sock.on('reconnecting', this._reconnecting.bind(this));
-		this._sock.on('reconnect_error', this._reconnect_error.bind(this));
-		this._sock.on('reconnect_failed', this._reconnect_failed.bind(this));
+		this._sock['on']('connect', this._connect.bind(this));
+		this._sock['on']('connect_error', this._connect_error.bind(this));
+		this._sock['on']('connect_timeout', this._connect_timeout.bind(this));
+		this._sock['on']('error', this._error.bind(this));
+		this._sock['on']('disconnect', this._disconnect.bind(this));
+		this._sock['on']('reconnect', this._reconnect.bind(this));
+		this._sock['on']('reconnect_attempt', this._reconnect_attempt.bind(this));
+		this._sock['on']('reconnecting', this._reconnecting.bind(this));
+		this._sock['on']('reconnect_error', this._reconnect_error.bind(this));
+		this._sock['on']('reconnect_failed', this._reconnect_failed.bind(this));
 	}
 
 	_onEvent: function (name, callback, data) {
