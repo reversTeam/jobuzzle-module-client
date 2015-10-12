@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-01 19:45:59
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-12 15:47:23
 **************************************************************/
 
 class ClientAuthMainService extends MasterService {
@@ -41,7 +41,7 @@ class ClientAuthMainService extends MasterService {
 		var serviceManager = serviceLocator.get('ServiceManager');
 
 		if (!this._token)
-			this._token = prompt('Take me a token : ');
+			this._token = prompt('Give me a token : ');
 
 		this._sock.send('auth', {
 			'token' : this._token
