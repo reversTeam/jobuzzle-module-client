@@ -7,7 +7,7 @@
 *       ## #     # #     # #     #    #       #    # #     #  *
 *       ## #     # #     # #     #   #       #     # ######   * @Last Modified by:   revers
 *  ####### #     # #     # #     #  #       #      # #        *
-*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-10-12 15:47:23
+*  ######   #####   ######  #####  ####### ####### # #######  * @Last Modified time: 2015-11-04 18:21:41
 **************************************************************/
 
 class ClientAuthMainService extends MasterService {
@@ -51,9 +51,13 @@ class ClientAuthMainService extends MasterService {
 	auth : function (data) {
 		var serviceManager = serviceLocator.get('ServiceManager');
 		var store = serviceManager.get('store_manager_main_service');
-		if (data != 'Invalid token') {
-			store.isMe(data);
+		if (!data.error) {
+			store.isMe(data.result.id);
+			store.addInCollection(data.result);
+			store.setSession(data.session);
 			this._cookie.create('token', this._token, 7);
+		} else {
+			console.debug(data);
 		}
 	}
 
